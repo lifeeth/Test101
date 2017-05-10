@@ -1,0 +1,44 @@
+- hosts: docker-hosts
+  become: true
+
+  tasks:
+    - name: apt update
+      apt : name={{item}} update_cache=yes
+      with_items:
+      - apt-transport-https 
+
+    - name: ensure repository key is installed
+      apt_key:
+        id: "58118E89F3A912897C070ADBF76221572C52609D"
+        keyserver: "hkp://p80.pool.sks-keyservers.net:80"
+        state: present
+
+    - name: ensure docker registry is available
+      # For Ubuntu 16.04 LTS, use this repo instead:
+      apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-xenial main' state=present
+
+    - name: ensure docker and dependencies are installed
+      apt: name=docker-engine update_cache=yes
+
+    # Uncomment the following to enable insecure registries with Docker
+    #- name: ensure docker can use insecure registries in 10.11.0.0/16
+    #  lineinfile: "dest=/etc/default/docker regexp=^DOCKER_OPTS line=DOCKER_OPTS='--insecure-registry 10.11.0.0/16'"
+
+    - service: name=docker state=restarted
+
+- hosts: swarm-manager
+  become: yes
+  gather_facts: true
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: bootstrap cluster
+      shell: >
+        docker info | egrep '^Swarm: ' | cut -d ' ' -f2
+      register: swarm_status
+    
+    - name: create swarm init and elect manager
+      shell: >
+        docker swarm init --advertise-addr {{ swarm_advertise_addr }} --listen-addr {{ swarm_listen_addr }}:2377
+      when: "'active' not in swarm_status.stdout_lines"
+      run_once: true 
