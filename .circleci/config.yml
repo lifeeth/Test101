@@ -40,6 +40,6 @@ jobs:
       # build and push Docker image
       - run: |
           TAG=0.1.$CIRCLE_BUILD_NUM
-          docker build -t wesleycharlesblake/Test101:$TAG .      # (3)
+          docker build -t wesleycharlesblake/test101:$TAG .      # (3)
           docker login -u $DOCKER_USER -p $DOCKER_PASS         # (4)
-          docker push wesleycharlesblake/Test101:$TAG
+          docker push wesleycharlesblake/test101:$TAG
