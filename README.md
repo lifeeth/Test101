@@ -7,5 +7,7 @@
 
 ```
 cd ansible-docker 
-ansible docker-host -i $PWD/hosts -m ping -u root
+ansible-playbook docker-install.yml -i $PWD/hosts -u root
 ```
+
+
