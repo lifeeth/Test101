@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  build:
+    steps:
+      - checkout   
+
+      - run:
+          name: Start container and verify it's working
+          command: |
+            set -x
+            docker-compose up -d
+            curl --retry 10 --retry-delay 5 -v http://localhost:8080
+            
+      - deploy:
+          name: Build and push Docker image
+          command: |
+            TAG="0.1.${CIRCLE_BUILD_NUM}"
+            docker build -t wesleycharlesblake/Test101:$TAG .
+            docker login -u $DOCKER_USER -p $DOCKER_PASSW
+            docker push wesleycharlesblake/Test101:$TAG
