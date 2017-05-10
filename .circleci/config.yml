@@ -1,6 +1,7 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/
     steps:
       - checkout   
 
@@ -10,7 +11,7 @@ jobs:
             set -x
             docker-compose up -d
             curl --retry 10 --retry-delay 5 -v http://localhost:8080
-            
+
       - deploy:
           name: Build and push Docker image
           command: |
