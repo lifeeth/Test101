@@ -1,0 +1,3 @@
+manager_iface: bond0
+swarm_advertise_addr: "{{ hostvars[inventory_hostname]['ansible_' + manager_iface]['ipv4']['address'] }}"
+swarm_listen_addr: "{{ hostvars[inventory_hostname]['ansible_' + manager_iface]['ipv4']['address'] }}"
