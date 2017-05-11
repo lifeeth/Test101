@@ -45,7 +45,10 @@ jobs:
           docker build -t wesleycharlesblake/test101:$TAG .
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker push wesleycharlesblake/test101:$TAG
-      
+
+      - add_ssh_keys:
+          fingerprints:
+            - "ff:39:5e:7c:41:06:20:31:53:19:c7:a9:e8:44:bc:6e"
 
       # Deploy production
       - deploy:

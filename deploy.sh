@@ -17,7 +17,7 @@ function update_service {
       --update-delay 1s \
       --update-failure-action rollback \
       --replicas 8 \
-      --image wesleycharlesblake/test101:0.1.20 \
+      --image wesleycharlesblake/test101:latest \
       test101
 }
 
@@ -25,6 +25,7 @@ function check_service {
     docker service inspect test101
 }
 
+docker pull wesleycharlesblake/test101:latest
 check_service
 
 container_test=$?
