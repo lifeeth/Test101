@@ -1,6 +1,5 @@
 #!/bin/bash
-
-ssh root@147.75.32.163 << EOF
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@147.75.32.163 << EOF
 function create_service {
     docker service create \
       --name test101 \
